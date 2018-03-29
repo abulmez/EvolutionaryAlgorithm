@@ -65,4 +65,14 @@ public class FileRepo {
     public int getNumberOfColumns(){
         return matrix.getColumns();
     }
+
+    public Double getMin(){
+        Double min = Double.MAX_VALUE;
+        for(int i=0;i<getNumberOfRows();i++){
+            for(int j=0;j<getNumberOfColumns();j++)
+                if(getValue(i,j)<min)
+                    min = getValue(i,j);
+        }
+        return min;
+    }
 }

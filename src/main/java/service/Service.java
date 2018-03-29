@@ -154,4 +154,8 @@ public class Service {
         }
         return min;
     }
+
+    public Double getMinFromCrossing(){
+        return repo.getMin();
+    }
 }
