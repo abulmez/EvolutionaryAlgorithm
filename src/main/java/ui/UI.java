@@ -28,6 +28,8 @@ public class UI {
         int generationNumber = sc.nextInt();
         System.out.println("Dati marimea populatiei:");
         int populationSize = sc.nextInt();
+        System.out.println("Dati factorul de mutatie: (valoare intre 0 si 10)");
+        int mutatianRate = sc.nextInt();
 
         Stopwatch stopwatch = Stopwatch.createStarted();
 
@@ -38,7 +40,7 @@ public class UI {
 
         stopwatch.reset();
         stopwatch.start();
-        System.out.println("Minimul determinat prin algoritm evolutiv: "+service.solve(generationNumber,populationSize));
+        System.out.println("Minimul determinat prin algoritm evolutiv: "+service.solve(generationNumber,populationSize,mutatianRate));
         stopwatch.stop();
         System.out.println("Cautarea a durat: "+stopwatch.elapsed(MILLISECONDS)+ " milisecunde");
     }

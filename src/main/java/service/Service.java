@@ -18,18 +18,20 @@ public class Service {
         this.repo = repo;
         normalizationMatrix = new Matrix<>(repo.getNumberOfRows(),repo.getNumberOfColumns(),0.0);
         minHistory = new ArrayList<>();
-        initMutationVector();
     }
 
-    private void initMutationVector(){
+    private void initMutationVector(Integer mutatianRate){
         mutationVector = new ArrayList<>();
-        mutationVector.add(0.3);
-        mutationVector.add(0.2);
-        mutationVector.add(0.2);
-        mutationVector.add(0.1);
-        mutationVector.add(0.1);
-        mutationVector.add(0.05);
-        mutationVector.add(0.05);
+        mutationVector.add(0.1*mutatianRate);
+
+        Double remainingMutatianRate = (Double)(1-0.1*mutatianRate);
+        mutationVector.add(0.3*remainingMutatianRate);
+        mutationVector.add(0.2*remainingMutatianRate);
+        mutationVector.add(0.2*remainingMutatianRate);
+        mutationVector.add(0.1*remainingMutatianRate);
+        mutationVector.add(0.1*remainingMutatianRate);
+        mutationVector.add(0.05*remainingMutatianRate);
+        mutationVector.add(0.05*remainingMutatianRate);
         cumsum(mutationVector);
     }
 
@@ -120,7 +122,8 @@ public class Service {
         return new Chromosome(newCoords.toArray(new Integer[0]));
     }
 
-    public double solve(Integer numberOfGenerations, Integer populationSize){
+    public double solve(Integer numberOfGenerations, Integer populationSize,Integer mutatianRate){
+        initMutationVector(10-mutatianRate);
         Random r = new Random();
         Population p = new Population();
         for(int i=0;i<populationSize;i++) {
@@ -162,7 +165,4 @@ public class Service {
         return repo.getMin();
     }
 
-    public ArrayList<Double> getMinHistory() {
-        return minHistory;
-    }
 }
