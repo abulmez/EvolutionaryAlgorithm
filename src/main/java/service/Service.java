@@ -20,10 +20,13 @@ public class Service {
         minHistory = new ArrayList<>();
     }
 
+    /**
+     *  The function initializes the mutation vector with less/higher chance of mutation depending on the mutatianRate parameter
+        mutatiaRate - Integer between 0 and 10
+     **/
     private void initMutationVector(Integer mutatianRate){
         mutationVector = new ArrayList<>();
         mutationVector.add(0.1*mutatianRate);
-
         Double remainingMutatianRate = (Double)(1-0.1*mutatianRate);
         mutationVector.add(0.3*remainingMutatianRate);
         mutationVector.add(0.2*remainingMutatianRate);
@@ -35,6 +38,12 @@ public class Service {
         cumsum(mutationVector);
     }
 
+
+    /**
+     *  The function normalises the values of a population
+     * @param p - The population of which values will be normalized
+     * @return  Returns the sum of the values of every chromosome after normalisation
+     */
     private double normalizePopulation(Population p){
         Double min = Double.MAX_VALUE;
         for(Chromosome c:p.getChromosomesList()){
@@ -59,6 +68,13 @@ public class Service {
         return sum;
     }
 
+
+    /**
+     *  The function determines the value of a given probability using a provided simple random variable
+     * @param list  The distribution of the random variable
+     * @param random Double (probability between 0 and 1)
+     * @return  Returns the corresponding value for the given probability
+     */
     private Integer vasInv(List<Double> list,Double random){
         for(int i=0;i<list.size();i++){
             if(random<list.get(i)){
@@ -68,20 +84,39 @@ public class Service {
         return -1;
     }
 
+    /**
+     * The function determines the value associated with a chromosome
+     * @param c Chromosome
+     * @return  Returns the values of the provided Chromosome
+     */
     private double fitness(Chromosome c){
         return repo.getValue(c.getPosition());
     }
 
+    /**
+     * The function determines the value associated with a chromosome after normalisation
+     * @param c Chromosome
+     * @return Returns the values of the provided Chromosome with normalisation added
+     */
     private double fitnessWithNormalization(Chromosome c){
         return  fitness(c) + normalizationMatrix.get(c.getPosition().toArray(new Integer[0]));
     }
 
+    /**
+     * The function determines the cumulative sum of a list of values
+     * @param list List of Double values
+     */
     private void cumsum(List<Double> list){
         for(int j=1;j<list.size();j++){
             list.set(j,list.get(j)+list.get(j-1));
         }
     }
 
+    /**
+     * The function determines the minimum value in a population
+     * @param p Population
+     * @return Returns the minimum found value
+     */
     private Double evaluatePopulation(Population p){
         Double min = Double.MAX_VALUE;
         for(Chromosome c:p.getChromosomesList()){
@@ -93,12 +128,21 @@ public class Service {
         return min;
     }
 
+    /**
+     * The function resets the normalisation for a given population
+     * @param p Population
+     */
     private void resetNormalization(Population p){
         for(Chromosome c:p.getChromosomesList()) {
             normalizationMatrix.set(0.0,c.getPosition().toArray(new Integer[0]));
         }
     }
 
+
+    /**
+     * The function mutates a Chromosome
+     * @param offspring The Chromosome to be mutated
+     */
     private  void mutate(Chromosome offspring){
         for(int i=0;i<offspring.getPosition().size();i++){
             Integer mutationOffset = vasInv(mutationVector,Math.random());
@@ -114,6 +158,12 @@ public class Service {
         }
     }
 
+    /**
+     * The function creates a new Chromosome according to two other Chromosomes
+     * @param dad  One of the parent Chromosome
+     * @param mom  The other parent Chromosome
+     * @return  Return the offspring of the 2 provided chromosomes
+     */
     private Chromosome offspring(Chromosome dad,Chromosome mom){
         Vector<Integer> newCoords = new Vector<>();
         for(int i=0;i<dad.getPosition().size();i++){
@@ -122,6 +172,14 @@ public class Service {
         return new Chromosome(newCoords.toArray(new Integer[0]));
     }
 
+
+    /**
+     * The function determines the minimum value in an 1 or 2 dimensional array using an evolutionary algorithm
+     * @param numberOfGenerations
+     * @param populationSize    The size of every population in each generation
+     * @param mutatianRate     The mutation rate of the population
+     * @return  Return the found minimum
+     */
     public double solve(Integer numberOfGenerations, Integer populationSize,Integer mutatianRate){
         initMutationVector(10-mutatianRate);
         Random r = new Random();
@@ -161,6 +219,10 @@ public class Service {
         return min;
     }
 
+    /**
+     * The function determines the minimum value in an 1 or 2 dimensional array by browsing the array
+     * @return Return the minimum
+     */
     public Double getMinFromCrossing(){
         return repo.getMin();
     }
