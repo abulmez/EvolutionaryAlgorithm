@@ -12,10 +12,12 @@ public class Service {
     private FileRepo repo;
     private Matrix<Double> normalizationMatrix;
     private ArrayList<Double> mutationVector;
+    public static ArrayList<Double> minHistory;
 
     public Service(FileRepo repo){
         this.repo = repo;
         normalizationMatrix = new Matrix<>(repo.getNumberOfRows(),repo.getNumberOfColumns(),0.0);
+        minHistory = new ArrayList<>();
         initMutationVector();
     }
 
@@ -85,6 +87,7 @@ public class Service {
                 min = fitness(c);
             }
         }
+        minHistory.add(min);
         return min;
     }
 
@@ -157,5 +160,9 @@ public class Service {
 
     public Double getMinFromCrossing(){
         return repo.getMin();
+    }
+
+    public ArrayList<Double> getMinHistory() {
+        return minHistory;
     }
 }
